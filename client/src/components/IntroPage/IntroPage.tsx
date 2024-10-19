@@ -54,7 +54,7 @@ const IntroPage: React.FC = () => {
         </div>
       </nav>
 
-      <div className="fixed bg-custom-bg bg-cover bg-[100% 100%] bg-center h-screen flex">
+      <div className="fixed bg-custom-bg bg-cover bg-[100% 100%] bg-center h-screen flex w-full">
         <img src={metaBoy} alt="metaBoy" className="object-scale-down pb-[8%] pt-[6%] pl-[10%]" />
         <div className="font-lora text-white pt-[15%] pl-[10%] pr-[10%]">
           <span className="text-[40px]">Welcome to the</span>

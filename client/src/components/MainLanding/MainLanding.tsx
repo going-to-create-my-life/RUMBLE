@@ -33,7 +33,7 @@ const MainLanding = () => {
   
     return (
       <main
-        className="flex bg-custom2-bg justify-between items-center w-full h-[93vh] p-8 text-white">
+        className="flex bg-custom2-bg justify-between items-center w-full h-[93vh] p-8 text-white bg-cover">
         {/* Left Content */}
         <div className="flex flex-col w-[40vw]">
           <h1 className="text-3xl leading-tight">
