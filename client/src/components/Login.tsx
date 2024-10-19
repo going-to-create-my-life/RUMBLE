@@ -65,7 +65,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
           <FaApple className="mr-2" /> Sign up with Apple
         </button>
 
-        <button className="w-full py-2 bg-red-600 text-white rounded-lg flex items-center justify-center hover:opacity-90">
+        <button onClick={()=> window.location.href = "http://localhost:5000/auth/google/callback"} className="w-full py-2 bg-red-600 text-white rounded-lg flex items-center justify-center hover:opacity-90">
           <FaGoogle className="mr-2" /> Sign up with Google
         </button>
       </div>

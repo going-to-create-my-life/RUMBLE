@@ -1,14 +1,40 @@
 import sticker from "./../../images/sticker.png"
 import React, { useState } from 'react';
 import Web3 from 'web3';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
 declare global {
   interface Window {
     ethereum: any;
   }
 }
 const MainLanding = () => {
+  const location = useLocation();
+    // Function to get the token from query parameters
+    const getTokenFromQuery = (urlSearchParams : string) => {
+        const params = new URLSearchParams(urlSearchParams);
+        return params.get('token'); // Change 'token' if your query parameter has a different name
+    };
+
+    useEffect(() => {
+      const token = getTokenFromQuery(location.search);
+      if (token) {
+        console.log(token);
+          // Set the token as a cookie
+          Cookies.set('jwt', token, { expires: 7 }); // Expires in 7 days
+          console.log('Token saved as cookie:', token);
+      } else {
+          console.log('No token found in URL');
+      } 
+    }, [location.search]);
 
   const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    const token = Cookies.get('jwt');
+    if(account) window.location.href = `http://localhost:5000/add?x=${account}&token=${token}`;
+  }, [account]);
 
   const connectMetaMask = async () => {
     if (window.ethereum) {
