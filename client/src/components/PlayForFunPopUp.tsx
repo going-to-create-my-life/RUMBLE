@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
+import home from "./../../images/home.png";
+import rating from "./../../images/rating.png";
+import history from "./../../images/history.png";
+import notification from "./../../images/notification.png";
+import standing from "./../../images/standing.png";
+import { NavLink } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
 interface PlayForFunPopUpProps {
   onClose: () => void;
 }
@@ -37,9 +45,13 @@ const PlayForFunPopUp: React.FC<PlayForFunPopUpProps> = ({ onClose }) => {
             Challenge random people just for fun and learn Competitive Programming.
           </p>
           
-          <button onClick={()=> navigate(`/problem?level=${mlevel}&ether=0`)} className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+          <button onClick={()=> navigate(`/problem?level=${mlevel}&ether=0`)} className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors" />
+          {/* <NavLink to='/loading'>
+          <button className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
             Start Playing
           </button>
+          </NavLink> */}
+
         </div>
       </div>
     </div>
