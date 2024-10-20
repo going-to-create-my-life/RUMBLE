@@ -23,3 +23,10 @@ so we had the following plans made up:
 14. Creating a well-detailed profile as shown in our Figma designs paperwork.
 15. Proper stats in profile and invite system and setting up Notifications
 
+## Screenshots
+
+![My Image](https://drive.google.com/file/d/13tpHZisMq5j235FHEzac0GjXKHYISVW7/view?usp=sharing)
+![My Image](https://drive.google.com/file/d/1FbjxCHbQu7Qo-mYWaMOXXijMyFvOUUfw/view?usp=sharing)
+![My Image](https://drive.google.com/file/d/1ahw0RdFdg3VGdzR85M3sZlyxFZLzBFsn/view?usp=sharing)
+![My Image](https://drive.google.com/file/d/1v1Lqsx3fby4EeSrvDYaaR-cpjyh-9CwA/view?usp=sharing)
+![My Image](https://drive.google.com/file/d/1d4HcjNd-QvRpd8FL0BjKta2ZmUdjDj9M/view?usp=sharing)
