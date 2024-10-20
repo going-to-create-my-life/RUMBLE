@@ -62,7 +62,7 @@ const IntroPage: React.FC = () => {
           <span className="italic text-[105px] leading-[65px] font-[900]">RUMBLE!</span>
           <br />
           <br />
-          <span>Race against peers in intense 1v1 battles and level up your competitive programming game. Compete against the best of the best to make it to the top!</span>
+          <span className="text-[21px] pr-[10%]">Race against peers in intense 1v1 battles and level up your competitive programming game. Compete against the best of the best to make it to the top!</span>
           <br />
           <div className="pt-[10%]">
             <button
