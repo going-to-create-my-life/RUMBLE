@@ -6,7 +6,14 @@ const cors = require('cors'); // Import the cors package
 const PORT = process.env.PORT || 5000;
 require('./google')
 const app = express();
+const { Server } = require('socket.io');
+const http = require('http');
+const server = http.createServer(app);
 const SECRET = 'CSMACEMT'; // Your JWT secret key
+
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 // Configure session middleware
 app.use(session({
@@ -18,9 +25,6 @@ app.use(session({
 // Initialize Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors({
-    origin: 'http://localhost:3000' // Allow only requests from this origin
-}));
 // Route to start the authentication process
 app.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -70,7 +74,51 @@ app.get('/authen', (req, res) => {
     }
 });
 
+const io = new Server(server,{
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET","POST"],
+    },
+});
+let waitingUsers = []; 
+io.on('connection', (socket) => {
+    console.log('User connected: ', socket.id);
+
+    // Listen for the 'choose_level_and_ether' event
+    socket.on('choose_level_and_ether', ({ level, ether }) => {
+        console.log(`User ${socket.id} chose level ${level} with ether ${ether}`);
+
+        // Check if there is a user already waiting with the same level and ether
+        const matchedUserIndex = waitingUsers.findIndex(user => user.level === level && user.ether === ether);
+
+        if (matchedUserIndex !== -1) {
+            // If a match is found, retrieve the matched user
+            const matchedUser = waitingUsers[matchedUserIndex];
+            
+            // Inform both users they are matched
+            socket.emit('start_game', { opponentId: matchedUser.socketId });
+            io.to(matchedUser.socketId).emit('start_game', { opponentId: socket.id });
+
+            // Remove the matched user from the waiting list
+            waitingUsers.splice(matchedUserIndex, 1);
+
+        } else {
+            // No match found, add the current user to the waiting list
+            waitingUsers.push({ socketId: socket.id, level, ether });
+            console.log(`User ${socket.id} is waiting for a match on level ${level} with ether ${ether}`);
+        }
+    });
+
+    // Handle user disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected: ', socket.id);
+
+        // Remove user from waiting list if they disconnect while waiting
+        waitingUsers = waitingUsers.filter(user => user.socketId !== socket.id);
+    });
+});
+
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

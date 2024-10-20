@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState }from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Web3 from 'web3';
 
 interface LevelPopUpProps {
   onClose: () => void;
@@ -6,8 +9,9 @@ interface LevelPopUpProps {
 
 const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
   const [betAmount, setBetAmount] = useState(1);
+  const [mlevel, setmlevel] = useState('A');
   const levels = ['A', 'B', 'C', 'D'];
-
+  const navigate = useNavigate();
   const handleManualInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     if (!isNaN(value) && value >= 1 && value <= 10) {
@@ -15,6 +19,47 @@ const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
     }
   };
 
+  const [account, setAccount] = useState<string | null>(null);
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+
+  // Initialize web3 and MetaMask connection
+  useEffect(() => {
+    if (window.ethereum) {
+      const web3Instance = new Web3(window.ethereum);
+      setWeb3(web3Instance);
+
+      window.ethereum
+        .request({ method: 'eth_requestAccounts' })
+        .then((accounts: string[]) => {
+          setAccount(accounts[0]); // Set the user's account
+        })
+        .catch((err: Error) => {
+          console.error('Error connecting to MetaMask:', err);
+        });
+    } else {
+      console.error('MetaMask is not installed!');
+    }
+  }, []);
+
+  // Function to request payment
+  const requestPayment = async () => {
+    if (!account || !web3) {
+      console.error('Web3 or account not initialized');
+      return;
+    }
+    const toAddress = '0xb4386b597dEcC967F630DDD18d9BF2c28239E93f';
+    const amountToSend = web3.utils.toWei(betAmount, 'ether');
+    try {
+      await web3.eth.sendTransaction({
+        from: account,
+        to: toAddress,
+        value: amountToSend,
+      });
+      console.log('Transaction successful');
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
@@ -26,14 +71,16 @@ const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
         </div>
         <div className="p-4">
           <div className="flex justify-between mb-4">
-            {levels.map((level) => (
-              <div
-                key={level}
-                className="w-1/4 p-2 bg-purple-700 text-white text-center font-bold rounded mr-1 last:mr-0 cursor-pointer transition-colors hover:bg-purple-600 aspect-square flex items-center justify-center"
-              >
-                Level {level}
-              </div>
-            ))}
+          {levels.map((level) => (
+            <div
+              key={level} onClick={()=> setmlevel(level)}
+              className={`w-1/4 p-2 bg-purple-700 text-white text-center font-bold rounded mr-1 last:mr-0 cursor-pointer transition-colors hover:scale-125  aspect-square flex items-center justify-center${
+                level == mlevel ? ' bg-red-700' : ''
+              }`}
+            >
+              Level {level}
+            </div>
+          ))}
           </div>
           
           <div className="mb-4">
@@ -62,7 +109,7 @@ const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
             </div>
           </div>
           
-          <button className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+          <button onClick={requestPayment} className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
             Confirm
           </button>
         </div>
@@ -70,5 +117,5 @@ const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
     </div>
   );
 };
-
+// ()=> navigate(`/problem?level=${mlevel}&ether=${betAmount}`)
 export default LevelPopUp;

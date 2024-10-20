@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface PlayForFunPopUpProps {
   onClose: () => void;
 }
 
 const PlayForFunPopUp: React.FC<PlayForFunPopUpProps> = ({ onClose }) => {
+  const [mlevel, setmlevel] = useState('A');
   const levels = ['A', 'B', 'C', 'D'];
+  const navigate = useNavigate();
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -20,8 +23,10 @@ const PlayForFunPopUp: React.FC<PlayForFunPopUpProps> = ({ onClose }) => {
           <div className="flex justify-between mb-4">
             {levels.map((level) => (
               <div
-                key={level}
-                className="w-1/4 p-2 bg-purple-700 text-white text-center font-bold rounded mr-1 last:mr-0 cursor-pointer transition-colors hover:bg-purple-600 aspect-square flex items-center justify-center"
+                key={level} onClick={()=> setmlevel(level)}
+                className={`w-1/4 p-2 bg-purple-700 text-white text-center font-bold rounded mr-1 last:mr-0 cursor-pointer transition-colors hover:scale-125  aspect-square flex items-center justify-center${
+                  level == mlevel ? ' bg-red-700' : ''
+                }`}
               >
                 Level {level}
               </div>
@@ -32,7 +37,7 @@ const PlayForFunPopUp: React.FC<PlayForFunPopUpProps> = ({ onClose }) => {
             Challenge random people just for fun and learn Competitive Programming.
           </p>
           
-          <button className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+          <button onClick={()=> navigate(`/problem?level=${mlevel}&ether=0`)} className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
             Start Playing
           </button>
         </div>

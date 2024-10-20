@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import metaBoy from "./../../images/metaBoy.png";
 import Login from '../Login';
 import Cookies from 'js-cookie';
-import { useLocation  } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:5000');
 
 const IntroPage: React.FC = () => {
   const navigate = useNavigate(); // Get the navigate function
@@ -88,7 +89,7 @@ const IntroPage: React.FC = () => {
           <span className="italic text-[105px] leading-[65px] font-[900]">RUMBLE!</span>
           <br />
           <br />
-          <span className="text-[21px] pr-[10%]">Race against peers in intense 1v1 battles and level up your competitive programming game. Compete against the best of the best to make it to the top!</span>
+          <span>Race against peers in intense 1v1 battles and level up your competitive programming game. Compete against the best of the best to make it to the top!</span>
           <br />
           <div className="pt-[10%]">
             <button
