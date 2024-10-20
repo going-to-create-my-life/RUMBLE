@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-
+import home from "./../../images/home.png";
+import rating from "./../../images/rating.png";
+import history from "./../../images/history.png";
+import notification from "./../../images/notification.png";
+import standing from "./../../images/standing.png";
+import { NavLink } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 interface LevelPopUpProps {
   onClose: () => void;
 }
@@ -62,9 +71,12 @@ const LevelPopUp: React.FC<LevelPopUpProps> = ({ onClose }) => {
             </div>
           </div>
           
-          <button className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+         
+          <NavLink to="/loading" >
+            <button className="w-full py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
             Confirm
-          </button>
+            </button>
+        </NavLink>
         </div>
       </div>
     </div>
