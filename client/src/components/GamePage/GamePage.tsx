@@ -2,6 +2,7 @@
   import Select from 'react-tailwindcss-select';
   import Codeium from '../Codeium/Codeium';
   import { Clock } from 'lucide-react';
+  import MessageBox from './../MessageBox'
 
   const CodingChallengeInterface = () => {
     return (
@@ -41,6 +42,9 @@
             <div className="bg-black rounded-lg shadow p-4 h-1/2">
             <div className="p-2 bg-gray-500 mb-[5px] rounded-t-xl">
               <h2 className="text-xl font-bold mx-5 text-white">Results</h2>
+            </div>
+            <div>
+              <MessageBox/>
             </div>
             </div>
           </div>
