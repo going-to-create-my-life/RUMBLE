@@ -1,8 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import metaBoy from "./../../images/metaBoy.png";
 import Login from '../Login';
+import Cookies from 'js-cookie';
+import { useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const IntroPage: React.FC = () => {
+  const navigate = useNavigate(); // Get the navigate function
+    // Function to get the token from query parameters
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const token = Cookies.get('jwt');
+            const response = await fetch(`http://localhost:5000/authen?token=${token}`); // Replace with your URL
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            if(text){
+              console.log(text);
+              if (text == "SAFE") navigate('/dashboard');
+              else if (text == "WALLET") navigate('/home');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }, []);
+
   // State to control login form visibility
   const [showLogin, setShowLogin] = useState<boolean>(false);
 

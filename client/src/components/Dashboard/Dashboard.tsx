@@ -7,8 +7,52 @@ import standing from "./../../images/standing.png";
 import { NavLink } from "react-router-dom";
 import LevelPopUp from "./../LevelPopUp";
 import PlayForFunPopUp from "./../PlayForFunPopUp";
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Get the navigate function
+    // Function to get the token from query parameters
+    const getTokenFromQuery = (urlSearchParams : string) => {
+        const params = new URLSearchParams(urlSearchParams);
+        return params.get('token');
+    };
+
+    useEffect(() => {
+      console.log("DONEE1");
+      const token = getTokenFromQuery(location.search);
+      if (token) {
+        console.log(token);
+          // Set the token as a cookie
+          Cookies.set('jwt', token, { expires: 7 }); // Expires in 7 days
+          console.log('Token saved as cookie:', token);
+      } else {
+          console.log('No token found in URL');
+      }
+      const fetchData = async () => {
+        console.log("DONEE2");
+        try {
+            const token = Cookies.get('jwt');
+            const response = await fetch(`http://localhost:5000/authen?token=${token}`); // Replace with your URL
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            if(text){
+              console.log(text);
+              if (text == "LOGIN") navigate('/');
+              else if (text == "WALLET") navigate('/home');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }, [location.search]);
+
   const [showLevelPopup, setShowLevelPopup] = useState(false);
   const [showPlayForFunPopup, setShowPlayForFunPopup] = useState(false);
 

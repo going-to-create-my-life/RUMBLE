@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import { useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 declare global {
   interface Window {
     ethereum: any;
@@ -11,6 +12,7 @@ declare global {
 }
 const MainLanding = () => {
   const location = useLocation();
+  const navigate = useNavigate();
     // Function to get the token from query parameters
     const getTokenFromQuery = (urlSearchParams : string) => {
         const params = new URLSearchParams(urlSearchParams);
@@ -18,6 +20,7 @@ const MainLanding = () => {
     };
 
     useEffect(() => {
+      console.log("DONEE1");
       const token = getTokenFromQuery(location.search);
       if (token) {
         console.log(token);
@@ -27,6 +30,24 @@ const MainLanding = () => {
       } else {
           console.log('No token found in URL');
       } 
+      const fetchData = async () => {
+        try {
+            const token = Cookies.get('jwt');
+            const response = await fetch(`http://localhost:5000/authen?token=${token}`); // Replace with your URL
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            if(text){
+              console.log(text);
+              if (text == "SAFE") navigate('/dashboard');
+              else if (text == "LOGIN") navigate('/');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
     }, [location.search]);
 
   const [account, setAccount] = useState(null);

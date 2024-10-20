@@ -1,6 +1,58 @@
-import React from 'react';
 import logo from './../images/logo192.png'
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const MainDashboard = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Get the navigate function
+    // Function to get the token from query parameters
+    const getTokenFromQuery = (urlSearchParams : string) => {
+        const params = new URLSearchParams(urlSearchParams);
+        return params.get('token');
+    };
+
+    useEffect(() => {
+      console.log("DONEE1");
+      const token = getTokenFromQuery(location.search);
+      if (token) {
+        console.log(token);
+          // Set the token as a cookie
+          Cookies.set('jwt', token, { expires: 7 }); // Expires in 7 days
+          console.log('Token saved as cookie:', token);
+      } else {
+          console.log('No token found in URL');
+      }
+      // const fetchData = async () => {
+      //   console.log("DONEE2");
+      //   try {
+      //     const token = Cookies.get('jwt');
+      //       const response = await fetch(`https://localhost:5000/authen?token=${token}`); // Replace with your URL
+      //       console.log(response);
+      //       if (response.toString() == "LOGIN") navigate('/');
+      //       else if (response.toString() == "WALLET") navigate('/home');
+      //   } catch (error) {
+      //       console.error('Error fetching data:', error);
+      //   }
+      // };
+      // fetchData();
+    }, [location.search]);
+
+    // const fetchData = async () => {
+    //     try {
+    //       const token = Cookies.get('jwt');
+    //         const response = await fetch(`https://localhost:5000/authen?token=${token}`); // Replace with your URL
+    //         console.log(response);
+    //         if (response.toString() == "LOGIN") navigate('/');
+    //         else if (response.toString() == "WALLET") navigate('/home');
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // };
+    // fetchData();
+  //   useEffect(() => {
+  //     console.log("DONEE2");
+  // }, [navigate]);
   return (
     <div className="flex-grow p-4 mr-[15%] ml-[1%]">
       {/* User Info */}
